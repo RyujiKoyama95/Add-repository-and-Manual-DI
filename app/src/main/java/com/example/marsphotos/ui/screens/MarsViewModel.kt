@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.marsphotos.data.MarsPhotosRepositoryImpl
 import com.example.marsphotos.network.MarsApi
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -52,7 +53,11 @@ class MarsViewModel : ViewModel() {
     private fun getMarsPhotos() {
         viewModelScope.launch {
             marsUiState = try {
-                val listResult = MarsApi.retrofitService.getPhotos()
+                val marsPhotosRepositoryImpl = MarsPhotosRepositoryImpl()
+                // viewModelがデータのネットワークリクエストを直接するのではなく、
+                // リポジトリを介してデータを取得する(データ取得の役割はリポジトリで完結させる)
+                // リポジトリを挟むことで、viewModelがMarsApiを参照しなくなる
+                val listResult = marsPhotosRepositoryImpl.getMarsPhotos()
                 MarsUiState.Success("Success. ${listResult.size} Mars photos retrieved")
             } catch (e: IOException) {
                 MarsUiState.Error
