@@ -1,3 +1,4 @@
-Codelab by Google
+# Add repository and Manual DI
 
-Add repository and Manual DI
+- For Codelab practice
+- Codelab by Google
